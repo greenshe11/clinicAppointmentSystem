@@ -1,0 +1,4 @@
+flask
+flask-cors
+mysqldb
+flask_mysqldb

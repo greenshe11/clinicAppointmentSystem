@@ -1,0 +1,28 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with Checkboxes</title>
+</head>
+<body>
+    <h1>Fill out the form</h1>
+    <form action="/" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="checkboxes">Select your preferences:</label><br>
+        <input type="checkbox" id="option1" name="checkboxes" value="Option 1">
+        <label for="option1">Option 1</label><br>
+
+        <input type="checkbox" id="option2" name="checkboxes" value="Option 2">
+        <label for="option2">Option 2</label><br>
+
+        <input type="checkbox" id="option3" name="checkboxes" value="Option 3">
+        <label for="option3">Option 3</label><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
