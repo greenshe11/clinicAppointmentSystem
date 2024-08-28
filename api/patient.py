@@ -64,8 +64,9 @@ def patient_routes(self):
 
             # Insert new user into the database
             cursor.execute(
-                "INSERT INTO accounts (email, password) VALUES (%s, %s)",
-                (email, password)
+                
+                "CALL insert_patient (%s,%s,%s,%s,%s,%s)",
+             ("Roan", "Langreo", "Roo11", "123", "roan@email.com", "096782")
             )
             conn.commit()
 
