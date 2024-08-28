@@ -1,5 +1,0 @@
-flask
-flask-cors
-mysqldb
-flask_mysqldb
-secure-smtplib
