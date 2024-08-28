@@ -34,7 +34,7 @@ function deleteEvent(eventId) {
 }
 
 function getAppointments(month, year, day) {
-    return fetch(`http://localhost:5000/api/appointments/forPatient?month=${month}&day=${day}&year=${year}`)
+    return fetch(`http://localhost:5000/api/appointments/forPatient?Appointment_Month=${month}&Appointment_Day=${day}&Appointment_Year=${year}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -151,7 +151,7 @@ function resetClassName(newClass, oldClass) {
 function getAvailableTime(data){
     let hoursAll = [8,9,10,11,1,2,3,4]
     for (i=0; i<data.length; i++){
-        const valueToRemove = data[i].appointment_hour
+        const valueToRemove = data[i].Appointment_Time
         // Find the index of the value
         const index = hoursAll.indexOf(valueToRemove);
 
@@ -266,8 +266,8 @@ function showCalendar(month, year, monthData) {
     const getFilledCount = (day, year) =>{
         let count = 0
         for (i=0; i<monthData.length; i++){
-            if (monthData[i].appointment_day == day &&
-                monthData[i].appointment_year == year
+            if (monthData[i].Appointment_Day == day &&
+                monthData[i].Appointment_Year == year
             ){
                 count = count + 1
             }

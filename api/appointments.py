@@ -1,34 +1,38 @@
 from flask import request, jsonify
 from flask_cors import cross_origin
+from utilities.util_functions import get_query, pull_from_db, push_to_db, update_db, delete_from_db
 
-def appointment_routes(self):
+def appointment_routes(self, table_name):
     """Define Flask routes."""
 
     @self.app.route('/api/appointments/forPatient', methods=['GET'])
     @cross_origin(supports_credentials=True)
-    def client_appointments():
-        """Retrieves appointments viewable on patients side: by time in a date"""
-        month = request.args.get('month', type=int)
-        year = request.args.get('year', type=int)
-        day = request.args.get('day', type=int)
-        conn = self.connect_db()
-        cursor = conn.cursor()
-        try:
-            # Execute SQL query to get user information by user_id
-            cursor.execute("SELECT * FROM tblappointment WHERE appointment_month = %s AND appointment_year = %s AND appointment_day = %s", (month, year, day))
-            rows = cursor.fetchall()
+    def appointment_pull_by_patient():
+        data = request.args.to_dict()
+        processed_data = {}
 
-            # Get column names from cursor description
-            column_names = [desc[0] for desc in cursor.description]
+        for key, value in zip(data.keys(), data.values()):
+            if value != 'null':
+                processed_data[key] = int(value)
+        
+        return pull_from_db(self, processed_data, table_name)
 
-            # Convert rows to a list of dictionaries with column names as keys
-            result = []
-            for row in rows:
-                result.append(dict(zip(column_names, row)))
-
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cursor.close()
-            conn.close()
+    @self.app.route('/api/appointments', methods=['POST'])
+    def appointment_push():
+        """Add a new user to the database."""
+        data = request.json
+        return push_to_db(self, data, table_name=table_name)
+       
+    
+    @self.app.route('/api/appointments', methods=['PUT'])
+    def appointment_update():
+        data = request.json
+        print(data)
+        return update_db(self, data, table_name, filter_names=['Appointment_ID'])
+    
+    @self.app.route('/api/appointments', methods=['DELETE'])
+    def appointment_delete():
+        data = request.json
+        print(data)
+        return delete_from_db(self, data, table_name, filter_names = ['Appointment_ID'])
+    

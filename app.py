@@ -51,7 +51,7 @@ class App:
 
     def create_api_routes(self):
         patient_routes(self)
-        appointment_routes(self)
+        appointment_routes(self, 'tblappointment')
 
     def run(self):
         """Run the Flask application."""
