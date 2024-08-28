@@ -8,6 +8,7 @@ def appointment_routes(self, table_name):
     @self.app.route('/api/appointments/forPatient', methods=['GET'])
     @cross_origin(supports_credentials=True)
     def appointment_pull_by_patient():
+        # url parameters will are used for filtering
         data = request.args.to_dict()
         processed_data = {}
 

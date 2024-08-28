@@ -3,10 +3,15 @@ import os
 import MySQLdb as Mysqldb
 from flask import Flask, render_template
 from flask_mysqldb import MySQL
-from api.patient import patient_routes
-from api.appointments import appointment_routes
 from flask_cors import CORS
 # Load environment variables from .env file
+
+#api routes
+from api.patient import patient_routes
+from api.appointments import appointment_routes
+from api.diagnosis import diagnosis_routes
+from api.sms import sms_routes
+
 load_dotenv()
 
 class App:
@@ -50,8 +55,10 @@ class App:
                 return f"Error: {e}", 500
 
     def create_api_routes(self):
-        patient_routes(self)
+        patient_routes(self, 'tblpatient')
         appointment_routes(self, 'tblappointment')
+        diagnosis_routes(self, 'tbldiagnosis')
+        sms_routes(self, 'tblsmsnotif')
 
     def run(self):
         """Run the Flask application."""

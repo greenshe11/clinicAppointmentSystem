@@ -1,6 +1,6 @@
 from flask import jsonify
 
-def get_query(cursor, table_name, data, method, filter_names):
+def get_query(cursor, table_name, data, method, filter_names=[]):
     """
         optional:
             filter_names (string []): to be used for PUT and DELETE methods. 
@@ -44,7 +44,8 @@ def get_query(cursor, table_name, data, method, filter_names):
 
     # make statements using correct sql syntax based on request method
     if method.upper() == "GET":
-        statement = f"SELECT * FROM {table_name} WHERE {' AND '.join(['{} = %s'.format(name) for name in columns_selected])}"
+        statement = f"SELECT * FROM {table_name} {'WHERE' if len(data) else ''} {' AND '.join(['{} = %s'.format(name) for name in columns_selected])}"
+        print(statement)
 
     elif method.upper() == "POST":
         statement = f"INSERT INTO {table_name} ({', '.join(columns_selected)}) VALUES ({', '.join('%s' for x in range(len(columns_selected)))})"
