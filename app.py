@@ -69,12 +69,7 @@ class App:
             
         @self.app.route('/register')
         def patient_register():
-            # Here you would fetch any necessary data from the database to render the page
             try:
-                # returns to login page if not authenticated
-                if util.no_user_logged_in():
-                    return redirect('/login')
-                
                 return render_template('register.html')
             except Exception as e:
                 return f"Error: {e}", 500
