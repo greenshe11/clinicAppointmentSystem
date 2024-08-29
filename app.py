@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 import MySQLdb as Mysqldb
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_mysqldb import MySQL
 from flask_cors import CORS
 # Load environment variables from .env file
@@ -11,6 +11,10 @@ from api.patient import patient_routes
 from api.appointments import appointment_routes
 from api.diagnosis import diagnosis_routes
 from api.sms import sms_routes
+
+# utils
+from utilities import util_functions as util
+
 
 load_dotenv()
 
@@ -27,6 +31,7 @@ class App:
     
     def configure_app(self):
         """Configure Flask app with MySQL settings."""
+        self.app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET') 
 
         self.app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
         self.app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
@@ -53,6 +58,26 @@ class App:
                 return render_template('datetime_reservation.html')
             except Exception as e:
                 return f"Error: {e}", 500
+        
+        @self.app.route('/login')
+        def patient_login():
+            # Here you would fetch any necessary data from the database to render the page
+            try:
+                return render_template('login.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
+        @self.app.route('/register')
+        def patient_register():
+            # Here you would fetch any necessary data from the database to render the page
+            try:
+                # returns to login page if not authenticated
+                if util.no_user_logged_in():
+                    return redirect('/login')
+                
+                return render_template('register.html')
+            except Exception as e:
+                return f"Error: {e}", 500
 
     def create_api_routes(self):
         patient_routes(self, 'tblpatient')
@@ -63,7 +88,6 @@ class App:
     def run(self):
         """Run the Flask application."""
         self.app.run(debug=True)
-
 
 if __name__ == '__main__':
     app_instance = App()

@@ -1,6 +1,6 @@
-from flask import request
+from flask import request, jsonify
 from flask_cors import cross_origin
-from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db
+from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, hashPassword, set_session, get_session
 
 def patient_routes(self, table_name):
     """Define Flask routes."""
@@ -23,9 +23,25 @@ def patient_routes(self, table_name):
     def patient_push():
         """Add a new user to the database."""
         data = request.json
+
+        # For security purpose, encrypts password sent to database
+        arguments = request.args.to_dict()
+        if arguments['for'] == 'registration':
+            data["PatientPassword"] = hashPassword(data["PatientPassword"])
+            duplicates = pull_from_db(self, {"PatientEmail": data['PatientEmail'], "PatientContactNo": data["PatientContactNo"]}, table_name, jsonify_return=False, logical_op="OR")
+            print(duplicates)
+            if len(duplicates) > 0:
+                return jsonify({"customError": "Contact No. or Email is in use!"}), 200
+       
+        if arguments['for'] == 'login':
+            credentials = pull_from_db(self, {"PatientEmail": data['PatientEmail']}, table_name, jsonify_return=False)
+            correct_password = hashPassword(data["PatientPassword"]) == credentials[0]['PatientPassword']
+            set_session('userId', credentials[0]['Patient_ID'])
+            if correct_password:
+                return jsonify({"customError": "Password or Email is incorrect!"}), 200
+
         return push_to_db(self, data, table_name=table_name)
 
-    
     @self.app.route('/api/patient', methods=['PUT'])
     def patient_update():
         data = request.json
