@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_cors import cross_origin
-from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, remove_sessions, hashPassword, get_session, set_session, check_password
+from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, remove_sessions, calendar, hashPassword, get_session, set_session, check_password
 
 def patient_routes(self, table_name):
     """Define Flask routes."""
@@ -27,6 +27,11 @@ def patient_routes(self, table_name):
 
         
         return pull_from_db(self, processed_data, table_name)
+    
+    @self.app.route('/api/patient/getCalendar', methods=['GET'])
+    @cross_origin(supports_credentials=True)
+    def patient_pull_calendar():
+        return jsonify({"html": calendar.html})
 
     @self.app.route('/api/patient', methods=['POST'])
     def patient_push():

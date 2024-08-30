@@ -32,7 +32,6 @@ class App:
     def configure_app(self):
         """Configure Flask app with MySQL settings."""
         self.app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET') 
-
         self.app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
         self.app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
         self.app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
@@ -77,13 +76,13 @@ class App:
                 return render_template('register.html')
             except Exception as e:
                 return f"Error: {e}", 500
-        
+            
         @self.app.route('/home')
         def patient_home():
             if util.no_user_logged_in(): #proceeds to login page if not logged in
                 return redirect('/login')
             try:
-                return render_template('PLACEHOLDER_home.html')
+                return render_template('main.html')
             except Exception as e:
                 return f"Error: {e}", 500
 

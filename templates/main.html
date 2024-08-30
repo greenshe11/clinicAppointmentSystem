@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,39 +6,254 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>sandbox</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/sidebar.css')}}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .profile-container {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border-bottom-width: 1px;
+            border-bottom-color: #817F7E;
+            border-bottom-style: solid;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin: 20px;
+        }
+
+        .profile-name-container {
+            color: #817F7E;
+        }
+
+        .openbtn {
+            margin-left: -20px;
+            margin-top: 20px;
+        }
+
+        span {
+            color: rgba(255, 0, 0, 0.5);
+        }
+
+        span:hover {
+            cursor: pointer;
+            color: rgba(255, 0, 0, 1);
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div id="mySidebar" class="sidebar">
-            <a class="closebtn" href="javascript:void(0)"
-                onclick="closeNav()" style="font-size: 25px;">x</a>
-            <a href="#">Home</a>
+            <a class="closebtn" href="javascript:void(0)" onclick="closeExpansion()" style="font-size: 25px;">x</a>
+            <div class="profile-container">
+                <div class="profile-avatar-container">
+                    <img src="{{ url_for('static',filename='p-default-inverted.png')}}" class="user-icon" id="icon" alt="User Icon" />
+                </div>
+                <div>
+                    <div class="profile-name-container" id="userName"></div>
+                    <hr>
+                    <span onclick="logout()">Log out</span>
+                </div>
+            </div>
+            <a href="/home">Home</a>
             <a href="#">Appointments</a>
             <a href="#">Diagnosis History</a>
-            <a href="#">About</a></div>
-        <div id="main"><button class="btn btn-primary openbtn" type="button" onclick="openNav()">☰</button></div>
+            <a href="#">About</a>
+        </div>
+        <div id="main"><button class="btn btn-primary openbtn" style="position: fixed" type="button" onclick="expand()">☰</button></div>
         <div id="content">
-            <div id="home">
-                <h1>ChatBotClinic</h1>
-                <p>Book Now!</p>
-                <button id="changeButton" class="btn btn-primary">Book</button>
+            <div id="home-container">
+                <div id="home">
+                    <h1>ChatBotClinic</h1>
+                    <p>Book Now!</p>
+                    <button id="changeButton" class="btn btn-primary">Book</button>
+                </div>
+                <div id="calendar" style="display:none">
+                    <link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation.css') }}">
+                    <h1 class = "dr-title" style="text-align: center; margin-bottom: 50px;">Set Appointment Date and Time</h1>
+                    <!-- Main wrapper for the calendar application -->
+                    <div class="dr-body">
+                            <div class="dr-container-calendar">
+                                
+                                    <div class="dr-button-container-calendar">
+                                        <button id="dr-previous"
+                                                onclick="previous()">
+                                            ‹
+                                        </button>
+                                        <h3 id="dr-monthAndYear"></h3>
+                                        <button id="dr-next"
+                                                onclick="next()">
+                                            ›
+                                        </button>
+                                    </div>
+                                    <table class="dr-table-calendar"
+                                        id="dr-calendar"
+                                        data-lang="en">
+                                        <thead id="dr-thead-month"></thead>
+                                        <!-- Table body for displaying the calendar -->
+                                        <tbody id="dr-calendar-body"></tbody>
+                                    </table>
+                                    <div class="dr-footer-container-calendar">
+                                        <label for="dr-month">Jump To: </label>
+                                        <!-- Dropdowns to select a specific month and year -->
+                                        <select id="dr-month" onchange="jump()">
+                                            <option value=0>Jan</option>
+                                            <option value=1>Feb</option>
+                                            <option value=2>Mar</option>
+                                            <option value=3>Apr</option>
+                                            <option value=4>May</option>
+                                            <option value=5>Jun</option>
+                                            <option value=6>Jul</option>
+                                            <option value=7>Aug</option>
+                                            <option value=8>Sep</option>
+                                            <option value=9>Oct</option>
+                                            <option value=10>Nov</option>
+                                            <option value=11>Dec</option>
+                                        </select>
+                                        <!-- Dropdown to select a specific year -->
+                                        <select id="dr-year" onchange="jump()"></select>
+                                    </div>
+                                    
+                                    <div id="dr-event-section">
+                                        <div class="dr-footer-container-calendar dr-set-time">
+                                            <label for="dr-month1">Appointment Time: </label>
+                                            <!-- Dropdowns to select a specific time -->
+                                            <select id="dr-month1" class="dr-hoursChoices" onchange="">
+                                            </select>
+                                        </div>
+                                    </div>
 
+                                    <div style="display: flex; justify-content: center">
+                                        <button class="dr-confirm-button">Set Appointment</button>
+                                    </div>
+                                
+                            </div>
+                            
+                    </div>
+                        <!-- Include the JavaScript file for the calendar functionality -->
+                    <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
+
+                </div>
             </div>
-
-            
         </div>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
+    <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
     <script>
-        $(document).ready(function(){
+        function getName() {
+            return fetch(`api/patient?for=session`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const LastName = data[0].PatientLastName;
+                    const firstName = data[0].PatientName;
+                    const userNameDiv = document.getElementById('userName');
+                    userNameDiv.innerHTML = `${LastName}, ${firstName}`;
+                    return data; // Return the data to the caller
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    return []; // Return an empty array on error
+                });
+        }
+
+        getName();
+        $("#calendar").css('display','none')
+
+        async function logout() {
+            try {
+                const response = await fetch('/api/patient?for=logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                if (result.hasOwnProperty('customError')) {
+                    alert(result.customError);
+                    return;
+                }
+
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/home';
+            }
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        const closeExpansion = () => {
+            $("#main").css('opacity', '1');
+            closeNav();
+        }
+
+        const expand = () => {
+            openNav();
+            $("#main").css('opacity', '0');
+        }
+
+        $(document).ready(function () {
             function showConfirmationPrompt() {
-                // Check if the confirmation prompt already exists to avoid duplicates
                 if ($('#confirmation-prompt').length === 0) {
                     const confirmationHTML = `
                         <div id="confirmation-prompt">
@@ -52,15 +268,11 @@
             }
 
             function clearCheckboxes() {
-                // Uncheck all checkboxes and remove the confirmation prompt
                 $('input[type="checkbox"]').prop('checked', false);
                 $('#confirmation-prompt').remove();
             }
 
-            
-
-            // Event delegation to handle button clicks
-            $('#home').on('click', '#changeButton', function() {
+            $('#home').on('click', '#changeButton', function () {
                 $('#home').html(`
                     <h1>Choose Your Predefined Symptoms</h1>
                     <div id="contents" class='checkbox-container container'>
@@ -86,22 +298,18 @@
                         </label>
                     </div>
                     <br>
-                    
                 `);
 
-                // Event delegation to handle checkbox changes
-                $('#contents').on('change', 'input[type="checkbox"]', function() {
+                $('#contents').on('change', 'input[type="checkbox"]', function () {
                     if ($(this).is(':checked')) {
                         showConfirmationPrompt();
                     } else {
-                        $('#confirmation-prompt').remove(); // Remove prompt if the checkbox is unchecked
+                        $('#confirmation-prompt').remove();
                     }
                 });
-
-                
             });
 
-            $('#home').on('click', '#backButton', function() {
+            $('#home').on('click', '#backButton', function () {
                 $('#home').html(`
                     <h1>ChatBotClinic</h1>
                     <p>Book Now!</p>
@@ -109,31 +317,33 @@
                 `);
             });
 
-            $('#home').on('click', '#confirmYes', function() {
-                    alert('Symptom confirmed!');
-                    $('#confirmation-prompt').remove();
-
-                    $('#home').html(`
+            $('#home').on('click', '#confirmYes', function () {
+                alert('Symptom confirmed!');
+                $('#confirmation-prompt').remove();
+                $('#home').html(`
                     <h1>Your initial diagnosis Result</h1>
                     <div id="contents-response">
                         <p>Your Initial Diagnosis is .......
                             you can schedule your appointment through the calendar button    
                         </p>
-                    
                     </div> <br>
                     <button id="backButton" class="btn btn-primary">
-                        <i class="fas fa-calendar"></i>
+                        <i onclick="openDatetimeSetter()" class="fas fa-calendar"></i>
                     </button>
                 `);
-                });
+            });
 
-            $('#home').on('click', '#confirmNo', function() {
+            $('#home').on('click', '#confirmNo', function () {
                 alert('Symptom not confirmed.');
-                $('#confirmation-prompt').remove(); // Remove prompt
+                $('#confirmation-prompt').remove();
                 clearCheckboxes();
             });
         });
-
+        
+        function openDatetimeSetter(){
+            $("#calendar").css('display','block')
+            $("#home").css('display', 'none')
+        }
     </script>
 
 </body>

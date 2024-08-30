@@ -10,6 +10,8 @@ def get_query(cursor, table_name, data, method, filter_names=[],logical_op="AND"
                 and will exclude them to selected/target columns.
 
                 for the case of GET, it will count the whole data as filter. Thus, will count as target columns.
+            logical_op (string): to be used for PUT, DELETE, and GET methods.
+                can be AND or OR. Logical operator to be used for filtering.
     """
 
     # Class for easy access of values
@@ -243,3 +245,18 @@ def check_password(plain_password, hashed_password):
     is_match = bcrypt.checkpw(plain_password_bytes, hashed_password)
     
     return is_match
+
+class Calendar:
+    def __init__(self):
+        """
+            To read calendar immediately on start of server and only once.
+        """
+        with open('templates/datetime_reservation.html', 'r') as f:
+            content = f.read()
+        self.html = content
+        print('Calendar loaded to server.')
+    def get_calendar(self):
+        return self.html
+
+# initiated during import of util_functions on app.py
+calendar = Calendar()
