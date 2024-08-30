@@ -52,7 +52,6 @@ class App:
     def create_page_routes(self):
         @self.app.route('/')
         def home():
-            # Here you would fetch any necessary data from the database to render the page
             try:
                 return render_template('datetime_reservation.html')
             except Exception as e:
@@ -60,7 +59,6 @@ class App:
         
         @self.app.route('/login')
         def patient_login():
-            # Here you would fetch any necessary data from the database to render the page
             if not util.no_user_logged_in(): # proceeds to home if logged in
                 return redirect('/home')
             try:
@@ -76,7 +74,7 @@ class App:
                 return render_template('register.html')
             except Exception as e:
                 return f"Error: {e}", 500
-            
+           
         @self.app.route('/home')
         def patient_home():
             if util.no_user_logged_in(): #proceeds to login page if not logged in
