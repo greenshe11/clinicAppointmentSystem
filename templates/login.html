@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html>
      <head>
-          <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
-          <link rel="stylesheet" href="static/assets/css/loginform.css">
+          <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+          <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/loginform.css')}}">
      </head>
 
      <body>
-
           <div class="container-fluid">
-
                <div class="wrapper fadeInDown">
                     <div id="formContent">
                       <!-- Tabs Titles -->
                       <h2 class="active"> Sign In </h2>
-                      <h2 class="inactive underlineHover">Sign Up </h2>
+                      <h2 class="inactive underlineHover link" onclick="toRegister()" >Sign Up </h2>
                   
                       <!-- Icon -->
                       <div class="fadeIn first">
-                        <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+                        <img src="{{ url_for('static',filename='p-default.png')}}" class="user-icon" id="icon" alt="User Icon" />
                       </div>
                   
                       <!-- Login Form -->
-                      <form>
-                        <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-                        <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
-                        <input type="submit" class="fadeIn fourth" value="Log In">
+                      <form onsubmit="return false">
+                        <input type="email" id="email" class="fadeIn second" name="login" placeholder="email">
+                        <input type="password" id="password" class="fadeIn third" name="login" placeholder="password">
+                        <input type="submit" class="fadeIn fourth" onclick="login0()" value="Log In">
                       </form>
                   
                       <!-- Remind Passowrd -->
@@ -38,6 +36,45 @@
 
           </div>
 
-          <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+          <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
+          <script>
+               function toRegister(){
+                    window.location.href = '/register';
+               }
+
+               async function login0(){
+                    const PatientEmail = document.getElementById("email").value
+                    const PatientPassword = document.getElementById("password").value
+                    const data = {PatientEmail, PatientPassword}
+                                     
+                    try {
+                         const response = await fetch('/api/patient?for=login', {
+                         method: 'POST',
+                         headers: {
+                         'Content-Type': 'application/json',
+                         },
+                         body: JSON.stringify(data),
+                         });
+               
+                         if (!response.ok) {
+                         throw new Error('Network response was not ok');
+                         }
+
+                         const result = await response.json();
+                         console.log(result.hasOwnProperty('customError'))
+                         if (result.hasOwnProperty('customError')) {
+                              alert(result.customError)
+                              return 
+                         }
+                         
+                         alert("LOGIN IS A SUCCESS!")
+                         window.location.href = '/home'
+                         // Handle the result (e.g., show a success message to the user)
+                    } catch (error) {
+                         console.error('Error:', error);
+                         // Handle errors (e.g., show an error message to the user)
+                    }
+               };
+          </script>
      </body>
 </html>

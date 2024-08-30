@@ -1,43 +1,34 @@
 <!DOCTYPE html>
 <html>
      <head>
-          <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-          <link rel="stylesheet" href="bootstrap/css/style.css">
+          <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+          <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/loginform.css')}}">
      </head>
-
      <body>
-
           <div class="container-fluid">
 
                <div class="wrapper fadeInDown">
                     <div id="formContent">
                       <!-- Tabs Titles -->
-                      <h2 class="inactive underlineHover"> Sign In </h2>
+                      <h2 class="inactive underlineHover link" onclick="toLogin()"> Sign In </h2>
                       <h2 class="active">Sign Up </h2>
                   
                       <!-- Icon -->
                       <div class="fadeIn first">
-                        <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+                         <img src="{{ url_for('static',filename='p-default.png')}}" class="user-icon" id="icon" alt="User Icon" />
                       </div>
                   
                       <!-- Login Form -->
-                      <form>
-                        
-                        <div id="regform" class="row">
-                              <div id="regform-left" class="col-sm-6">
-                                   <input type="text" id="login" class="fadeIn second" name="login" placeholder="name">
-                                   <input type="text" id="password" class="fadeIn third" name="login" placeholder="lastname">
-
-
-                              </div>
-                              <div id="regform-right" class="col-sm-6">
-                                   <input type="text" id="login" class="fadeIn second" name="login" placeholder="email">
-                                    <input type="text" id="password" class="fadeIn third" name="login" placeholder="contact">
-
-                              </div>
-                        </div>
-
-                        <input type="submit" class="fadeIn fourth" value="Register">
+                      <form onsubmit="return false">
+                    
+                         <input type="text" id="firstname" class="fadeIn second" name="firstname" placeholder="firstname" required>
+                         <input type="text" id="lastname" class="fadeIn third" name="lastname" placeholder="lastname" required>
+                         <input type="email" id="email" class="fadeIn second" name="email" placeholder="email" required>
+                         <input type="text" inputmode="numeric" autocomplete="cc-number" id="contact" class="fadeIn third" name="contact" placeholder="contact no." required/>
+                         <input type="password" id="password1" class="fadeIn third" name="password1" placeholder="password" required>
+                         <input type="password" id="password2" class="fadeIn third" name="password2" placeholder="confirm password" required>
+               
+                        <input type="submit" class="fadeIn fourth" onclick="register()" value="Register">
                       </form>
                   
                       <!-- Remind Passowrd -->
@@ -49,7 +40,51 @@
                </div>
 
           </div>
+          <script>
+               function toLogin(){
+                    window.location.href = '/login';
+               }
+               async function register(){
+                    const PatientName = document.getElementById("firstname").value
+                    const PatientLastName = document.getElementById("lastname").value
+                    const PatientEmail = document.getElementById("email").value
+                    const PatientPassword = document.getElementById("password1").value
+                    const PatientPasswordConfirm = document.getElementById("password2").value
+                    const PatientContactNo = document.getElementById("contact").value
+                    const data = {PatientName, PatientLastName, PatientEmail, PatientPassword, PatientContactNo}
+                    if (PatientPassword!=PatientPasswordConfirm){
+                         alert("Confirmed password must be the same password!")
+                         return null
+                    }                     
+                    try {
+                         const response = await fetch('/api/patient?for=registration', {
+                         method: 'POST',
+                         headers: {
+                         'Content-Type': 'application/json',
+                         },
+                         body: JSON.stringify(data),
+                         });
+               
+                         if (!response.ok) {
+                         throw new Error('Network response was not ok');
+                         }
 
-          <script src="bootstrap/js/bootstrap.min.js"></script>
+                         const result = await response.json();
+                         console.log(result.hasOwnProperty('customError'))
+                         if (result.hasOwnProperty('customError')) {
+                              alert(result.customError)
+                              return
+                         }
+
+                         alert('REGISTRATION IS A SUCCESS!')
+                         window.location.href = '/login'
+                         // Handle the result (e.g., show a success message to the user)
+                    } catch (error) {
+                         console.error('Error:', error);
+                         // Handle errors (e.g., show an error message to the user)
+                    }
+               };
+          </script>
+          <script src="{{ url_for('static',filename='bootstrap.min.js')}}"></script>
      </body>
 </html>

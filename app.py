@@ -1,12 +1,21 @@
 from dotenv import load_dotenv
 import os
 import MySQLdb as Mysqldb
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_mysqldb import MySQL
-from api.patient import patient_routes
-from api.appointments import appointment_routes
 from flask_cors import CORS
 # Load environment variables from .env file
+
+#api routes
+from api.patient import patient_routes
+from api.appointments import appointment_routes
+from api.diagnosis import diagnosis_routes
+from api.sms import sms_routes
+
+# utils
+from utilities import util_functions as util
+
+
 load_dotenv()
 
 class App:
@@ -22,7 +31,7 @@ class App:
     
     def configure_app(self):
         """Configure Flask app with MySQL settings."""
-
+        self.app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET') 
         self.app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
         self.app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
         self.app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
@@ -43,17 +52,13 @@ class App:
     def create_page_routes(self):
         @self.app.route('/')
         def home():
-            # Here you would fetch any necessary data from the database to render the page
             try:
                 return render_template('datetime_reservation.html')
             except Exception as e:
                 return f"Error: {e}", 500
-<<<<<<< Updated upstream
-=======
         
         @self.app.route('/login')
         def patient_login():
-            # Here you would fetch any necessary data from the database to render the page
             if not util.no_user_logged_in(): # proceeds to home if logged in
                 return redirect('/home')
             try:
@@ -66,28 +71,28 @@ class App:
             if not util.no_user_logged_in(): # proceeds to home if logged in
                 return redirect('/home')
             try:
-                return render_template('main.html')
+                return render_template('register.html')
             except Exception as e:
                 return f"Error: {e}", 500
-        
+           
         @self.app.route('/home')
         def patient_home():
             if util.no_user_logged_in(): #proceeds to login page if not logged in
                 return redirect('/login')
             try:
-                return render_template('PLACEHOLDER_home.html')
+                return render_template('main.html')
             except Exception as e:
                 return f"Error: {e}", 500
->>>>>>> Stashed changes
 
     def create_api_routes(self):
-        patient_routes(self)
-        appointment_routes(self)
+        patient_routes(self, 'tblpatient')
+        appointment_routes(self, 'tblappointment')
+        diagnosis_routes(self, 'tbldiagnosis')
+        sms_routes(self, 'tblsmsnotif')
 
     def run(self):
         """Run the Flask application."""
         self.app.run(debug=True)
-
 
 if __name__ == '__main__':
     app_instance = App()

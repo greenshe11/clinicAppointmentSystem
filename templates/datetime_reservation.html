@@ -1,45 +1,33 @@
-<!-- index.html -->
 
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation.css') }}">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, 
-                initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation.css') }}">
-    <title>Dynamic Calendar</title>
-</head>
-
-<body>
-    <!-- Main wrapper for the calendar application -->
-    <div class="wrapper">
-        <div class="container-calendar">
-            <div id="right">
-                
-                <div class="button-container-calendar">
-                    <button id="previous"
+<!-- Main wrapper for the calendar application -->
+<div class="dr-body">
+    <div class="dr-wrapper">
+        <div class="dr-container-calendar">
+            <div id="dr-right">
+                <div class="dr-button-container-calendar">
+                    <button id="dr-previous"
                             onclick="previous()">
                         ‹
                     </button>
-                    <h3 id="monthAndYear"></h3>
-                    <button id="next"
+                    <h3 id="dr-monthAndYear"></h3>
+                    <button id="dr-next"
                             onclick="next()">
                         ›
                     </button>
                 </div>
-                <table class="table-calendar"
-                    id="calendar"
+                <table class="dr-table-calendar"
+                    id="dr-calendar"
                     data-lang="en">
-                    <thead id="thead-month"></thead>
+                    <thead id="dr-thead-month"></thead>
                     <!-- Table body for displaying the calendar -->
-                    <tbody id="calendar-body"></tbody>
+                    <tbody id="dr-calendar-body"></tbody>
                 </table>
-                <div class="footer-container-calendar">
-                    <label for="month">Jump To: </label>
+                <div class="dr-footer-container-calendar">
+                    <label for="dr-month">Jump To: </label>
                     <!-- Dropdowns to select a specific month and year -->
-                    <select id="month" onchange="jump()">
+                    <select id="dr-month" onchange="jump()">
                         <option value=0>Jan</option>
                         <option value=1>Feb</option>
                         <option value=2>Mar</option>
@@ -54,29 +42,24 @@
                         <option value=11>Dec</option>
                     </select>
                     <!-- Dropdown to select a specific year -->
-                    <select id="year" onchange="jump()"></select>
-                    
+                    <select id="dr-year" onchange="jump()"></select>
                 </div>
                 
-                <div id="event-section">
-                    <div class="footer-container-calendar set-time">
-                        <label for="month1">Appointment Time: </label>
-                        <!-- Dropdowns to select a specific month and year -->
-                        <select id="month1" class="hoursChoices" onchange="">
-                            
+                <div id="dr-event-section">
+                    <div class="dr-footer-container-calendar dr-set-time">
+                        <label for="dr-month1">Appointment Time: </label>
+                        <!-- Dropdowns to select a specific time -->
+                        <select id="dr-month1" class="dr-hoursChoices" onchange="">
                         </select>
-                        
                     </div>
                 </div>
 
                 <div style="display: flex; justify-content: center">
-                    <button class="confirm-button">Set Appointment</button>
+                    <button class="dr-confirm-button">Set Appointment</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
     <!-- Include the JavaScript file for the calendar functionality -->
-    <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
-</body>
-
-</html>
+<script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>

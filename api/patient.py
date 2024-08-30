@@ -1,140 +1,87 @@
 from flask import request, jsonify
+from flask_cors import cross_origin
+from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, remove_sessions, calendar, hashPassword, get_session, set_session, check_password
 
-def patient_routes(self):
+def patient_routes(self, table_name):
     """Define Flask routes."""
 
     @self.app.route('/api/patient', methods=['GET'])
-    def pull_all():
-        """Retrieve all users from the database."""
-        conn = self.connect_db()
-        cursor = conn.cursor()
-        try:
-            cursor.execute("SELECT * FROM accounts")
-            rows = cursor.fetchall()
-            # Convert rows to a list of dictionaries
-            result = []
-            for row in rows:
-                result.append({
-                    'id': row[0],
-                    'email': row[1],
-                    'password': row[2]
-                })
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cursor.close()
-            conn.close()
+    @cross_origin(supports_credentials=True)
+    def patient_pull():
+        # example: http://localhost:5000/api/patient?Patient_ID=10
+        # url parameters will are used for filtering
+        data = request.args.to_dict()
+        processed_data = {}
 
-    @self.app.route('/api/patient/<int:user_id>', methods=['GET'])
-    def pull(user_id):
-        """Retrieve a specific user's information from the database based on user_id."""
-        conn = self.connect_db()
-        cursor = conn.cursor()
-        try:
-            # Execute SQL query to get user information by user_id
-            cursor.execute("SELECT * FROM accounts WHERE id = %s", (user_id,))
-            rows = cursor.fetchall()
+      
+        arguments = data
+        # having parameter: "for" will have special processes
+        if 'for' in arguments.keys():
+            if arguments['for'] == 'session':
+                processed_data = {'Patient_ID': get_session('userId')}
+            
+        else:
+            for key, value in zip(data.keys(), data.values()):
+                if value != 'null':
+                    processed_data[key] = int(value)
 
-            # Get column names from cursor description
-            column_names = [desc[0] for desc in cursor.description]
-
-            # Convert rows to a list of dictionaries with column names as keys
-            result = []
-            for row in rows:
-                result.append(dict(zip(column_names, row)))
-
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cursor.close()
-            conn.close()
+        
+        return pull_from_db(self, processed_data, table_name)
+    
+    @self.app.route('/api/patient/getCalendar', methods=['GET'])
+    @cross_origin(supports_credentials=True)
+    def patient_pull_calendar():
+        return jsonify({"html": calendar.html})
 
     @self.app.route('/api/patient', methods=['POST'])
-    def push():
+    def patient_push():
         """Add a new user to the database."""
-        conn = self.connect_db()
-        cursor = conn.cursor()
-        try:
-            # Get data from the request body
-            data = request.json
-            email = data.get('email')
-            password = data.get('password')
+        data = request.json
 
-            # Insert new user into the database
-            cursor.execute(
+       
+        arguments = request.args.to_dict()
+        # having parameter: "for", will give special processes
+        if "for" in arguments.keys():
+            if arguments['for'] == 'registration':
+                # For security purpose, encrypts password sent to database
+                data["PatientPassword"] = hashPassword(data["PatientPassword"])
+                duplicates = pull_from_db(self, {"PatientEmail": data['PatientEmail'], "PatientContactNo": data["PatientContactNo"]}, table_name, jsonify_return=False, logical_op="OR")
+                print(duplicates)
+                if len(duplicates) > 0:
+                    return jsonify({"customError": "Contact No. or Email is in use!"}), 200
+        
+            if arguments['for'] == 'login':
+                credentials = pull_from_db(self, {"PatientEmail": data['PatientEmail']}, table_name, jsonify_return=False)
+                print(credentials)
+                #correct_password = hashPassword(data["PatientPassword"]) == credentials[0]['PatientPassword']
+                correct_password = check_password(data["PatientPassword"], credentials[0]["PatientPassword"])
                 
-                "CALL insert_patient (%s,%s,%s,%s,%s,%s)",
-             ("Roan", "Langreo", "Roo11", "123", "roan@email.com", "096782")
-            )
-            conn.commit()
+                if correct_password:
+                    set_session('userId', credentials[0]['Patient_ID'])
+                    # logging in doesnt require to add data to database atm; returns back to the client immediately without error
+                    # all good as long as session has been set
+                    return jsonify({})
+                else:
+                    return jsonify({"customError": "Password or Email is incorrect!"}), 200
+                
+            if arguments['for'] == 'logout':
+                # logging out doesnt require to add data to database atm; returns back to the client immediately without error
+                # all good as long as session has been removed
+                remove_sessions()
+                return jsonify({}), 201
+                
 
-            return jsonify({"message": "User added successfully"}), 201
-        except Exception as e:
-            conn.rollback()  # Rollback transaction on error
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cursor.close()
-            conn.close()
+        return push_to_db(self, data, table_name=table_name)
 
     @self.app.route('/api/patient', methods=['PUT'])
-    def update():
-        """Update a user's information in the database."""
-        conn = self.connect_db()
-        cursor = conn.cursor()
-        try:
-            # Get data from the request body
-            data = request.json
-            user_id = data.get('id')
-            email = data.get('email')
-            password = data.get('password')
-
-            # Validate input
-            if not email or not password:
-                return jsonify({"error": "Missing required fields"}), 400
-
-            # Update user information
-            cursor.execute(
-                "UPDATE accounts SET email = %s, password = %s WHERE id = %s",
-                (email, password, user_id)
-            )
-            conn.commit()
-
-            if cursor.rowcount == 0:
-                return jsonify({"error": "User not found"}), 404
-
-            return jsonify({"message": "User updated successfully"}), 200
-        except Exception as e:
-            conn.rollback()  # Rollback transaction on error
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cursor.close()
-            conn.close()
-
-    @self.app.route('/api/patient', methods=['DELETE'])
-    def delete():
-        """Delete a user from the database."""
-        conn = self.connect_db()
-        cursor = conn.cursor()
-        # Get data from the request body
+    def patient_update():
         data = request.json
-        user_id = data.get('id')
-        try:
-            # Delete user from the database
-            cursor.execute(
-                "DELETE FROM accounts WHERE id = %s",
-                (user_id,)
-            )
-            conn.commit()
-
-            if cursor.rowcount == 0:
-                return jsonify({"error": "User not found"}), 404
-
-            return jsonify({"message": "User deleted successfully"}), 200
-        except Exception as e:
-            conn.rollback()  # Rollback transaction on error
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cursor.close()
-            conn.close()
+        print(data)
+        return update_db(self, data, table_name, filter_names=['Patient_ID'])
+    
+    @self.app.route('/api/patient', methods=['DELETE'])
+    def patient_delete():
+        data = request.json
+        print(data)
+        return delete_from_db(self, data, table_name, filter_names = ['Patient_ID'])
+    
