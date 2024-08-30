@@ -62,6 +62,8 @@ class App:
         @self.app.route('/login')
         def patient_login():
             # Here you would fetch any necessary data from the database to render the page
+            if not util.no_user_logged_in(): # proceeds to home if logged in
+                return redirect('/home')
             try:
                 return render_template('login.html')
             except Exception as e:
@@ -69,8 +71,19 @@ class App:
             
         @self.app.route('/register')
         def patient_register():
+            if not util.no_user_logged_in(): # proceeds to home if logged in
+                return redirect('/home')
             try:
                 return render_template('register.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+        
+        @self.app.route('/home')
+        def patient_home():
+            if util.no_user_logged_in(): #proceeds to login page if not logged in
+                return redirect('/login')
+            try:
+                return render_template('PLACEHOLDER_home.html')
             except Exception as e:
                 return f"Error: {e}", 500
 

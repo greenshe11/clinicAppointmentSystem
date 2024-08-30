@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_cors import cross_origin
-from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, hashPassword, set_session, get_session
+from utilities.util_functions import pull_from_db, push_to_db, update_db, delete_from_db, remove_sessions, hashPassword, get_session, set_session, check_password
 
 def patient_routes(self, table_name):
     """Define Flask routes."""
@@ -13,9 +13,18 @@ def patient_routes(self, table_name):
         data = request.args.to_dict()
         processed_data = {}
 
-        for key, value in zip(data.keys(), data.values()):
-            if value != 'null':
-                processed_data[key] = int(value)
+      
+        arguments = data
+        # having parameter: "for" will have special processes
+        if 'for' in arguments.keys():
+            if arguments['for'] == 'session':
+                processed_data = {'Patient_ID': get_session('userId')}
+            
+        else:
+            for key, value in zip(data.keys(), data.values()):
+                if value != 'null':
+                    processed_data[key] = int(value)
+
         
         return pull_from_db(self, processed_data, table_name)
 
@@ -24,21 +33,38 @@ def patient_routes(self, table_name):
         """Add a new user to the database."""
         data = request.json
 
-        # For security purpose, encrypts password sent to database
-        arguments = request.args.to_dict()
-        if arguments['for'] == 'registration':
-            data["PatientPassword"] = hashPassword(data["PatientPassword"])
-            duplicates = pull_from_db(self, {"PatientEmail": data['PatientEmail'], "PatientContactNo": data["PatientContactNo"]}, table_name, jsonify_return=False, logical_op="OR")
-            print(duplicates)
-            if len(duplicates) > 0:
-                return jsonify({"customError": "Contact No. or Email is in use!"}), 200
        
-        if arguments['for'] == 'login':
-            credentials = pull_from_db(self, {"PatientEmail": data['PatientEmail']}, table_name, jsonify_return=False)
-            correct_password = hashPassword(data["PatientPassword"]) == credentials[0]['PatientPassword']
-            set_session('userId', credentials[0]['Patient_ID'])
-            if correct_password:
-                return jsonify({"customError": "Password or Email is incorrect!"}), 200
+        arguments = request.args.to_dict()
+        # having parameter: "for", will give special processes
+        if "for" in arguments.keys():
+            if arguments['for'] == 'registration':
+                # For security purpose, encrypts password sent to database
+                data["PatientPassword"] = hashPassword(data["PatientPassword"])
+                duplicates = pull_from_db(self, {"PatientEmail": data['PatientEmail'], "PatientContactNo": data["PatientContactNo"]}, table_name, jsonify_return=False, logical_op="OR")
+                print(duplicates)
+                if len(duplicates) > 0:
+                    return jsonify({"customError": "Contact No. or Email is in use!"}), 200
+        
+            if arguments['for'] == 'login':
+                credentials = pull_from_db(self, {"PatientEmail": data['PatientEmail']}, table_name, jsonify_return=False)
+                print(credentials)
+                #correct_password = hashPassword(data["PatientPassword"]) == credentials[0]['PatientPassword']
+                correct_password = check_password(data["PatientPassword"], credentials[0]["PatientPassword"])
+                
+                if correct_password:
+                    set_session('userId', credentials[0]['Patient_ID'])
+                    # logging in doesnt require to add data to database atm; returns back to the client immediately without error
+                    # all good as long as session has been set
+                    return jsonify({})
+                else:
+                    return jsonify({"customError": "Password or Email is incorrect!"}), 200
+                
+            if arguments['for'] == 'logout':
+                # logging out doesnt require to add data to database atm; returns back to the client immediately without error
+                # all good as long as session has been removed
+                remove_sessions()
+                return jsonify({}), 201
+                
 
         return push_to_db(self, data, table_name=table_name)
 

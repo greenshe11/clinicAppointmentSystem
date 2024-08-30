@@ -64,9 +64,11 @@
                          console.log(result.hasOwnProperty('customError'))
                          if (result.hasOwnProperty('customError')) {
                               alert(result.customError)
+                              return 
                          }
-
-                         console.log('Success:', result);
+                         
+                         alert("LOGIN IS A SUCCESS!")
+                         window.location.href = '/home'
                          // Handle the result (e.g., show a success message to the user)
                     } catch (error) {
                          console.error('Error:', error);

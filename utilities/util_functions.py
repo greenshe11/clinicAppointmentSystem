@@ -1,6 +1,5 @@
 from flask import jsonify, session
 import bcrypt
-from sqlalchemy.exc import IntegrityError
 
 
 def get_query(cursor, table_name, data, method, filter_names=[],logical_op="AND"):
@@ -86,10 +85,7 @@ def pull_from_db(self, data, table_name, jsonify_return=True, logical_op="AND"):
         if jsonify_return == False:
             return result
         return jsonify(result), 200
-    except IntegrityError as e:
-        conn.rollback()  # Rollback transaction on error
-        return jsonify({"error": str(e)}), 500
-    
+   
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
@@ -110,10 +106,7 @@ def push_to_db(self, data, table_name, success_response = None, jsonify_return=T
         if jsonify_return == False:
             return success_response
         return jsonify(success_response), 201
-    except IntegrityError as e:
-        conn.rollback()  # Rollback transaction on error
-        return jsonify({"error": str(e)}), 500
-    
+   
     except Exception as e:
         conn.rollback()  # Rollback transaction on error
         return jsonify({"error": str(e)}), 500
@@ -141,10 +134,7 @@ def update_db(self, data, table_name, filter_names, success_response = None):
             return jsonify({"error": "User not found"}), 404
 
         return jsonify(success_response), 200
-    except IntegrityError as e:
-        conn.rollback()  # Rollback transaction on error
-        return jsonify({"error": str(e)}), 500
-    
+   
 
     except Exception as e:
         conn.rollback()  # Rollback transaction on error
@@ -171,10 +161,7 @@ def delete_from_db(self, data, table_name, filter_names, success_response = None
             return jsonify({"error": "User not found"}), 404
 
         return jsonify({"message": "User deleted successfully"}), 200
-    except IntegrityError as e:
-        conn.rollback()  # Rollback transaction on error
-        return jsonify({"error": str(e)}), 500
-    
+   
     except Exception as e:
         conn.rollback()  # Rollback transaction on error
         return jsonify({"error": str(e)}), 500
@@ -198,18 +185,6 @@ def hashPassword(text):
     #print("Hashed password:", hashed_password)
     return hashed_password
 
-def checkPassword(text, hashed_password):
-    # The password provided by the user during login
-    provided_password = text
-
-    # Check if the provided password matches the hashed password
-    is_correct = bcrypt.checkpw(provided_password.encode('utf-8'), hashed_password.encode('utf-8'))
-
-    if is_correct:
-        return True
-    else:
-        return False
-    
 def set_session(label: str, value):
     """_summary_
 
@@ -255,3 +230,16 @@ def no_user_logged_in():
     if get_session("userId") is None:
         return True
     return False
+
+def check_password(plain_password, hashed_password):
+    # Convert the plain password to bytes, as bcrypt requires byte strings
+    
+    plain_password_bytes = plain_password.encode('utf-8')
+    if isinstance(hashed_password, str):
+        hashed_password = hashed_password.encode('utf-8')
+    
+    
+    # Check if the plain password matches the hashed password
+    is_match = bcrypt.checkpw(plain_password_bytes, hashed_password)
+    
+    return is_match
