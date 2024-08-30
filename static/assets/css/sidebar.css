@@ -11,6 +11,8 @@
   padding-top: 60px;
 }
 
+
+
 .sidebar a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
@@ -50,15 +52,105 @@
   padding: 100px;
   box-sizing: border-box;
   text-align: justify;
+
+
+ 
+
 }
 
 #home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
-#home input {
-  width: 60%;
+
+#contents {
+  height: 150px;
+  width: 600px;
+
+
+  background-color: white;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
+
+#contents-response {
+  height: 150px;
+  width: 600px;
+  border: 2px #111 solid;
+  border-radius: 20px;
+}
+
+.checkbox-container {
+  display: flex;
+  gap: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  margin-left: 25px;
+}
+
+/* Hide the browser's default radio button */
+.checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+
+.checkmark {
+  display: inline-block;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+
+/* On mouse-over, add a grey background color */
+.checkbox-label:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.checkbox-label input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.checkbox-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+
+.checkbox-label .checkmark:after {
+ position: relative;
+ top: 8px;
+ left: 8px;
+ width: 9px;
+ height: 9px;
+ border-radius: 50%;
+ background: white;
+}
+
+
+
 
 @media (max-height: 450px) {
   .sidebar .sidebar a {
