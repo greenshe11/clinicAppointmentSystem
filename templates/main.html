@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>sandbox</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div id="mySidebar" class="sidebar">
+            <a class="closebtn" href="javascript:void(0)"
+                onclick="closeNav()" style="font-size: 25px;">x</a>
+            <a href="#">Home</a>
+            <a href="#">Appointments</a>
+            <a href="#">Diagnosis History</a>
+            <a href="#">About</a></div>
+        <div id="main"><button class="btn btn-primary openbtn" type="button" onclick="openNav()">☰</button></div>
+        <div id="content">
+            <div id="home">
+                <h1>ChatBotClinic</h1>
+                <p>Book Now!</p>
+                <button id="changeButton" class="btn btn-primary">Book</button>
+
+            </div>
+
+            
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        $(document).ready(function(){
+            function showConfirmationPrompt() {
+                // Check if the confirmation prompt already exists to avoid duplicates
+                if ($('#confirmation-prompt').length === 0) {
+                    const confirmationHTML = `
+                        <div id="confirmation-prompt">
+                            <p>Confirm symptom?</p>
+                            <button id="confirmYes" class="btn btn-secondary">Yes</button>
+                            <button id="confirmNo" class="btn btn-secondary">No</button> <br><br>
+                            <button id="backButton" class="btn btn-primary">Back</button>
+                        </div>
+                    `;
+                    $('#home').append(confirmationHTML);
+                }
+            }
+
+            function clearCheckboxes() {
+                // Uncheck all checkboxes and remove the confirmation prompt
+                $('input[type="checkbox"]').prop('checked', false);
+                $('#confirmation-prompt').remove();
+            }
+
+            
+
+            // Event delegation to handle button clicks
+            $('#home').on('click', '#changeButton', function() {
+                $('#home').html(`
+                    <h1>Choose Your Predefined Symptoms</h1>
+                    <div id="contents" class='checkbox-container container'>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="Fever">
+                            <span class="checkmark"></span>
+                            Fever
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="Dizziness">
+                            <span class="checkmark"></span>
+                            Dizziness
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="Headache">
+                            <span class="checkmark"></span>
+                            Headache
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="Nausea">
+                            <span class="checkmark"></span>
+                            Nausea
+                        </label>
+                    </div>
+                    <br>
+                    
+                `);
+
+                // Event delegation to handle checkbox changes
+                $('#contents').on('change', 'input[type="checkbox"]', function() {
+                    if ($(this).is(':checked')) {
+                        showConfirmationPrompt();
+                    } else {
+                        $('#confirmation-prompt').remove(); // Remove prompt if the checkbox is unchecked
+                    }
+                });
+
+                
+            });
+
+            $('#home').on('click', '#backButton', function() {
+                $('#home').html(`
+                    <h1>ChatBotClinic</h1>
+                    <p>Book Now!</p>
+                    <button id="changeButton" class="btn btn-primary">Book</button>
+                `);
+            });
+
+            $('#home').on('click', '#confirmYes', function() {
+                    alert('Symptom confirmed!');
+                    $('#confirmation-prompt').remove();
+
+                    $('#home').html(`
+                    <h1>Your initial diagnosis Result</h1>
+                    <div id="contents-response">
+                        <p>Your Initial Diagnosis is .......
+                            you can schedule your appointment through the calendar button    
+                        </p>
+                    
+                    </div> <br>
+                    <button id="backButton" class="btn btn-primary">
+                        <i class="fas fa-calendar"></i>
+                    </button>
+                `);
+                });
+
+            $('#home').on('click', '#confirmNo', function() {
+                alert('Symptom not confirmed.');
+                $('#confirmation-prompt').remove(); // Remove prompt
+                clearCheckboxes();
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
