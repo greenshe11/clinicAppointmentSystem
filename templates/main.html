@@ -97,7 +97,7 @@
             </div>
             <div id="container-button">
                 <button class="btn btn-primary"><a href="/home">Home</a></button>
-                <button class="btn btn-primary"><a href="#">Schedule</a></button>
+                <button class="btn btn-primary"><a href="/schedule">Schedule</a></button>
                 <button class="btn btn-primary"><a href="#">History</a></button>
                 <button class="btn btn-primary"><a href="#">About</a></button>
 
@@ -185,6 +185,7 @@
     <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
     <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
     <script>
+        
         function getName() {
             return fetch(`api/patient?for=session`)
                 .then(response => {
