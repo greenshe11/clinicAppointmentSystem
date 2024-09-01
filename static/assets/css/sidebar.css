@@ -1,3 +1,75 @@
+body {
+  background-color: #212121;
+}
+
+#title-opening {
+  font-size: 150px;
+  color: #EAB464;
+}
+
+#title-second {
+  font-size: 60px;
+  color: #EAB464;
+}
+
+#title-third {
+  font-size: 40px;
+  color: #EAB464;
+  margin-bottom: 20px;
+}
+
+
+
+
+#confirmation-prompt-button {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+
+}
+
+#confirmation-prompt-button button {
+  flex: 1;
+
+}
+
+
+#confirmation-prompt p {
+  color: #EAB464;
+  font-size: 20px;
+}
+
+
+
+
+#home img {
+  display: flex;
+  width: 50px;
+  top: 13%;
+  right: 23%;
+
+}
+
+#home button {
+  width: 12%;
+  height: 50px;
+  margin-top: 50px;
+  background-color: #EAB464;
+  font-size: 25px;
+}
+
+#container-button button{
+ display: block;
+ margin-left: 50px;
+ margin-top: 20px;
+ width: 150px;
+ font-size: 25px;
+ transition: 0.3s;
+ background-color: #EAB464;
+}
+
+
+
 .sidebar {
   height: 100%;
   width: 0;
@@ -5,25 +77,10 @@
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #111;
+  background-color: red;
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
-}
-
-
-
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidebar a:hover {
-  color: #f1f1f1;
 }
 
 .sidebar .closebtn {
@@ -53,9 +110,6 @@
   box-sizing: border-box;
   text-align: justify;
 
-
- 
-
 }
 
 #home {
@@ -72,7 +126,7 @@
   width: 600px;
 
 
-  background-color: white;
+  background-color: #EAB464;
   margin: 50px auto;
   padding: 20px;
   box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
@@ -82,8 +136,12 @@
 #contents-response {
   height: 150px;
   width: 600px;
-  border: 2px #111 solid;
-  border-radius: 20px;
+
+ background-color: #EAB464;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
 
 .checkbox-container {
@@ -125,7 +183,7 @@
 
 /* When the radio button is checked, add a blue background */
 .checkbox-label input:checked ~ .checkmark {
-  background-color: #2196F3;
+  background-color: #212121;
 }
 
 .checkmark:after {
@@ -153,7 +211,7 @@
 
 
 @media (max-height: 450px) {
-  .sidebar .sidebar a {
+  .sidebar #container-button button {
     padding-top: 15px;
     font-size: 18px;
   }
