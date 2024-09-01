@@ -36,7 +36,7 @@ class App:
         self.app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
         self.app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
         self.app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
-        self.app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT')) 
+        #self.app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT')) 
 
     def connect_db(self):
         """Create a MySQL database connection."""
@@ -46,7 +46,7 @@ class App:
             user=self.app.config['MYSQL_USER'],
             password=self.app.config['MYSQL_PASSWORD'],
             db=self.app.config['MYSQL_DB'],
-            port=self.app.config['MYSQL_PORT'] 
+            #port=self.app.config['MYSQL_PORT'] 
         )
     
     def create_page_routes(self):
