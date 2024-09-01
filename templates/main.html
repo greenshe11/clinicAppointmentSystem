@@ -185,6 +185,7 @@
     <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
     <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
     <script>
+        
         function getName() {
             return fetch(`api/patient?for=session`)
                 .then(response => {

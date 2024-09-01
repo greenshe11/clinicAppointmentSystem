@@ -11,8 +11,6 @@ body {
   #title-opening {
     font-size: 60px;
   }
-
- 
 }
 
 
@@ -26,9 +24,6 @@ body {
   color: #EAB464;
   margin-bottom: 20px;
 }
-
-
-
 
 #confirmation-prompt-button {
   display: flex;
@@ -49,7 +44,16 @@ body {
 }
 
 
+#table {
+width: 80%;
 
+}
+
+#table h1 {
+   color: #EAB464;
+  font-size: 60px;
+ text-align: center;
+}
 
 #home img {
   display: flex;
