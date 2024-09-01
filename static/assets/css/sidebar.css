@@ -7,6 +7,15 @@ body {
   color: #EAB464;
 }
 
+@media only screen and (max-width: 600px){
+  #title-opening {
+    font-size: 60px;
+  }
+
+ 
+}
+
+
 #title-second {
   font-size: 60px;
   color: #EAB464;
@@ -57,6 +66,16 @@ body {
   background-color: #EAB464;
   font-size: 25px;
 }
+
+@media only screen and (max-width: 600px){
+  #home button {
+    width: 60%;
+    height: 70px;
+  }
+ 
+}
+
+
 
 #container-button button{
  display: block;
