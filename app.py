@@ -53,7 +53,8 @@ class App:
         @self.app.route('/')
         def home():
             try:
-                return render_template('datetime_reservation.html')
+                #return render_template('datetime_reservation.html')
+                return redirect('/login')
             except Exception as e:
                 return f"Error: {e}", 500
         
