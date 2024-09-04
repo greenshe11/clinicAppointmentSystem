@@ -1,5 +1,6 @@
 from flask import jsonify, session
 import bcrypt
+from datetime import datetime
 
 
 def get_query(cursor, table_name, data, method, filter_names=[],logical_op="AND"):
@@ -260,3 +261,41 @@ class Calendar:
 
 # initiated during import of util_functions on app.py
 calendar = Calendar()
+
+
+def parse_date(month: int, day:int, year:int, time:int, **kwargs):
+    month_str = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+    ]
+    get_time_postfix = lambda time: 'PM' if time < 8 else 'AM'
+    res = '{} {} {} {}:00 {}'.format(month_str[month-1], day, year, time, get_time_postfix(time))
+
+    return datetime.strptime(res, "%B %d %Y %I:%M %p")
+
+
+def sort_dates(patients):
+
+    """    ex.
+    patients = [
+        {"PatientLastName": "Smith", "PatientName": "John", "month": 3, "day": 14, "year": 2023, "time": 8},
+        {"PatientLastName": "Doe", "PatientName": "Jane", "month": 1, "day": 1, "year": 2024, "time": 10},
+        {"PatientLastName": "Brown", "PatientName": "Charlie", "month": 12, "day": 25, "year": 2023, "time": 9},
+    ]"""
+
+    # Sort the list of dates using the parsed datetime objects
+    
+    sorted_dates = sorted(patients, reverse=True, key=lambda x: parse_date(**x))
+    return sorted_dates
+
+
