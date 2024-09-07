@@ -80,7 +80,7 @@ class App:
             if util.no_user_logged_in(): #proceeds to login page if not logged in
                 return redirect('/login')
             try:
-                return render_template('main.html')
+                return render_template('patient/main.html')
             except Exception as e:
                 return f"Error: {e}", 500
             
@@ -89,7 +89,7 @@ class App:
             if util.no_user_logged_in(): #proceeds to schedule page if not logged in
                 return redirect('/home')
             try:
-                return render_template('schedule.html')
+                return render_template('patient/schedule.html')
             except Exception as e:
                 return f"Error: {e}", 500
             
@@ -98,7 +98,7 @@ class App:
             if util.no_user_logged_in(): #proceeds to schedule page if not logged in
                 return redirect('/home')
             try:
-                return render_template('history.html')
+                return render_template('patient/history.html')
             except Exception as e:
                 return f"Error: {e}", 500
             
@@ -107,7 +107,17 @@ class App:
             if util.no_user_logged_in(): #proceeds to schedule page if not logged in
                 return redirect('/home')
             try:
-                return render_template('About.html')
+                return render_template('patient/about.html')
+            except Exception as e:
+                return f"Error: {e}", 500
+            
+       
+        @self.app.route('/staff')
+        def staff_home():
+            if util.no_user_logged_in(): #proceeds to schedule page if not logged in
+                return redirect('/home')
+            try:
+                return render_template('staff/mainstaff.html')
             except Exception as e:
                 return f"Error: {e}", 500
             
