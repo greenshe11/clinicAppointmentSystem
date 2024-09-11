@@ -98,8 +98,8 @@
             <div id="container-button">
                 <button class="btn btn-primary"><a href="/home">Home</a></button>
                 <button class="btn btn-primary"><a href="/schedule">Schedule</a></button>
-                <button class="btn btn-primary"><a href="#">History</a></button>
-                <button class="btn btn-primary"><a href="#">About</a></button>
+                <button class="btn btn-primary"><a href="/history">History</a></button>
+                <button class="btn btn-primary"><a href="/about">About</a></button>
 
             </div>
         </div>
@@ -255,6 +255,8 @@
             $("#main").css('opacity', '0');
         }
 
+
+        //Jquery
         $(document).ready(function () {
             function showConfirmationPrompt() {
                 if ($('#confirmation-prompt').length === 0) {
@@ -280,47 +282,27 @@
 
             //code here
             $('#home').on('click', '#changeButton', function () {
-                $('#home').html(`
-                    <h1 id="title-second">Choose Your Predefined Symptoms</h1>
-                    <div id="contents" class='checkbox-container container'>
-                        <label class="checkbox-label">
-                            <input type="checkbox" value="Fever">
-                            <span class="checkmark"></span>
-                            Fever
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" value="Dizziness">
-                            <span class="checkmark"></span>
-                            Dizziness
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" value="Headache">
-                            <span class="checkmark"></span>
-                            Headache
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" value="Nausea">
-                            <span class="checkmark"></span>
-                            Nausea
-                        </label>
-                    </div>
-                    <br>
-                `);
+                //loaded the static function for much cleaner code
+                $('#home').load('/static/patient/symptoms.html', function(){
 
-                $('#contents').on('change', 'input[type="checkbox"]', function () {
-                    if ($(this).is(':checked')) {
-                        showConfirmationPrompt();
-                    } else {
-                        $('#confirmation-prompt').remove();
-                    }
+
+                    $('#contents').on('change', 'input[type="checkbox"]', function () {
+                        if ($(this).is(':checked')) {
+                            showConfirmationPrompt();
+                        } else {
+                            $('#confirmation-prompt').remove();
+                        }
+                    });
                 });
+
+               
             });
 
             $('#home').on('click', '#backButton', function () {
                 $('#home').html(`
                     <img src="{{ url_for('static',filename='g15.png')}}" />
                     <h1 id="title-opening">ChatBotClinic</h1>
-                    <button id="changeButton" class="btn btn-primary fas fa-calendar"> Book</button>
+                    <button id="changeButton" class="btn btn-primary fas fa-calendar">Book</button>
                
                 `);
             });

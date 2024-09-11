@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>sandbox</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/sidebar.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .profile-container {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border-bottom-width: 1px;
+            border-bottom-color: #817F7E;
+            border-bottom-style: solid;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin: 20px;
+        }
+
+        .profile-name-container {
+            color: #817F7E;
+        }
+
+        .openbtn {
+            margin-left: -20px;
+            margin-top: 20px;
+        }
+
+        span {
+            color: rgba(255, 0, 0, 0.5);
+        }
+
+        span:hover {
+            cursor: pointer;
+            color: rgba(255, 0, 0, 1);
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #171717;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            font-size: 25px;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div id="mySidebar" class="sidebar">
+            <a class="closebtn" href="javascript:void(0)" onclick="closeExpansion()" style="font-size: 25px;">x</a>
+            <div class="profile-container">
+                <div class="profile-avatar-container">
+                    <img src="{{ url_for('static',filename='p-default-inverted.png')}}" class="user-icon" id="icon" alt="User Icon" />
+                </div>
+                <div>
+                    <div class="profile-name-container" id="userName"></div>
+                    <hr>
+                    <span onclick="logout()">Log out</span>
+                </div>
+            </div>
+            <div id="container-button">
+                <button class="btn btn-primary"><a href="/home">Home</a></button>
+                <button class="btn btn-primary"><a href="/schedule">Schedule</a></button>
+                <button class="btn btn-primary"><a href="/history">History</a></button>
+                <button class="btn btn-primary"><a href="/about">About</a></button>
+
+            </div>
+        </div>
+        <div id="main">
+            <button class="btn btn-primary openbtn" style="position: fixed" type="button" onclick="expand()">☰</button>
+        </div>
+        
+    </div>
+
+
+    <!--Start-->
+<div id="table" class="container-fluid">
+    <h1>Patient Records</h1>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Schedule Info</p>
+        </div>
+        <div class="card-body">
+            
+            <div class="row">
+                <div class="col-md-6 text-nowrap">
+                    <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                                <option value="10" selected="">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>&nbsp;</label></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                </div>
+            </div>
+
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Age</th>
+                            <th>Schedule Date</th>
+                            <th>Chat History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Michael Ian</td>
+                            <td>Leguira</td>
+                            <td>23</td>
+                            <td>2008/11/28</td>
+                            <td><button class="btn btn-primary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>Dave</td>
+                            <td>Tumagan</td>
+                            <td>23</td>
+                            <td>2009/09/10</td>
+                            <td><button class="btn btn-primary">View</button></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Age</th>
+                            <th>Schedule Date</th>
+                            <th>Chat History</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-6 align-self-center">
+                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                </div>
+                <div class="col-md-6">
+                    <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
+    <script>
+        function getName() {
+            return fetch(`api/patient?for=session`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const LastName = data[0].PatientLastName;
+                    const firstName = data[0].PatientName;
+                    const userNameDiv = document.getElementById('userName');
+                    userNameDiv.innerHTML = `${LastName}, ${firstName}`;
+                    return data; // Return the data to the caller
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    return []; // Return an empty array on error
+                });
+        }
+
+        getName();
+
+        async function logout() {
+            try {
+                const response = await fetch('/api/patient?for=logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                if (result.hasOwnProperty('customError')) {
+                    alert(result.customError);
+                    return;
+                }
+
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/home';
+            }
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        const closeExpansion = () => {
+            $("#main").css('opacity', '1');
+            closeNav();
+        }
+
+        const expand = () => {
+            openNav();
+            $("#main").css('opacity', '0');
+        }
+    </script>
+
+</body>
+
+</html>

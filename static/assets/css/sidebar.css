@@ -7,7 +7,7 @@ body {
   color: #EAB464;
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 600px) {
   #title-opening {
     font-size: 60px;
   }
@@ -17,6 +17,18 @@ body {
 #title-second {
   font-size: 60px;
   color: #EAB464;
+}
+
+#about {
+  color: #EAB464;
+  justify-content: center;
+  text-align: center;
+  max-width: 900px;
+}
+
+#about p {
+  font-size: 24px;
+  margin-top: 50px;
 }
 
 #title-third {
@@ -45,14 +57,14 @@ body {
 
 
 #table {
-width: 80%;
+  width: 80%;
 
 }
 
 #table h1 {
-   color: #EAB464;
+  color: #EAB464;
   font-size: 60px;
- text-align: center;
+  text-align: center;
 }
 
 #home img {
@@ -71,24 +83,24 @@ width: 80%;
   font-size: 25px;
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 600px) {
   #home button {
     width: 60%;
     height: 70px;
   }
- 
+
 }
 
 
 
-#container-button button{
- display: block;
- margin-left: 50px;
- margin-top: 20px;
- width: 150px;
- font-size: 25px;
- transition: 0.3s;
- background-color: #EAB464;
+#container-button button {
+  display: block;
+  margin-left: 50px;
+  margin-top: 20px;
+  width: 150px;
+  font-size: 25px;
+  transition: 0.3s;
+  background-color: #EAB464;
 }
 
 
@@ -146,22 +158,22 @@ width: 80%;
 
 
 #contents {
-  height: 150px;
+  height: 200px;
   width: 600px;
-
-
   background-color: #EAB464;
   margin: 50px auto;
   padding: 20px;
   box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
+  overflow-x: scroll;
+
 }
 
 #contents-response {
   height: 150px;
   width: 600px;
 
- background-color: #EAB464;
+  background-color: #EAB464;
   margin: 50px auto;
   padding: 20px;
   box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
@@ -201,12 +213,12 @@ width: 80%;
 
 
 /* On mouse-over, add a grey background color */
-.checkbox-label:hover input ~ .checkmark {
+.checkbox-label:hover input~.checkmark {
   background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
-.checkbox-label input:checked ~ .checkmark {
+.checkbox-label input:checked~.checkmark {
   background-color: #212121;
 }
 
@@ -216,19 +228,36 @@ width: 80%;
 }
 
 /* Show the indicator (dot/circle) when checked */
-.checkbox-label input:checked ~ .checkmark:after {
+.checkbox-label input:checked~.checkmark:after {
   display: block;
 }
 
 
 .checkbox-label .checkmark:after {
- position: relative;
- top: 8px;
- left: 8px;
- width: 9px;
- height: 9px;
- border-radius: 50%;
- background: white;
+  position: relative;
+  top: 8px;
+  left: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: white;
+}
+
+#text-area textarea {
+  width: 500px;
+  height: 150px;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #EAB464;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: none;
+  /* Disable resizing */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
 }
 
 
@@ -240,4 +269,3 @@ width: 80%;
     font-size: 18px;
   }
 }
-
