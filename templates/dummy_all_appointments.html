@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <style>
+    input[]
+    </style>
+<body>
+    <span>Show count: </span><input value="10"><input type="button" value="refresh">
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>MM/DD/YYYY</th>
+                <th style="width: 30px"></th>
+                <th  style="width: 30px"><input class="dropdown" type="button" value="edit"><input class="dropdown" type="button" value="delete"></th>
+                
+            </tr>
+        </thead>
+        <tbody id="patientsTableValues">
+            
+        </tbody>
+    </table>
+    
+</body>
+<script>
+    function getAppointments() {
+        const getAmPm = (time) =>{
+            if (time<8){
+                return 'PM'
+            }else{
+                return 'AM'
+            }
+        }
+        return fetch(`api/patient?for=session`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(res => {
+                for (let i=0; i<res.length; i++){
+                `
+                <tr>
+                    <td>${res[i].PatientLastName}</td>
+                    <td>${res[i].PatientName}</td>
+                    <td>${res[i].Appointment_Month}/${res[i].Appointment_Day}/${res[i].AppointmentYear} ${res[i].Appointment_Time}${getAmPm(res[i].Appointment_Time)}</td>
+                    <td><input type="button" value=">"></td>
+                </tr>
+                `
+                }
+                return data; // Return the data to the caller
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                return []; // Return an empty array on error
+            });
+    }
+</script>
+</html>
