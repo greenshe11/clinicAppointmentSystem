@@ -37,3 +37,4 @@ def appointment_routes(self, table_name):
         print(data)
         return delete_from_db(self, data, table_name, filter_names = ['Appointment_ID'])
     
+
