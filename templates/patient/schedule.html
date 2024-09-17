@@ -82,6 +82,84 @@
 </head>
 
 <body>
+    <div id="dr-dimmer"></div>
+    
+    <div id="calendar" class="dr-modal" style="display: none">
+        <link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation_modal.css') }}">
+        <div class="dr-body">
+                <div class="dr-container-calendar">
+                        <div class="modal-top">
+                            <div>Rescheduling Appointment</div>
+                            <div class="dr-close-btn" onclick="onClickCloseCal()">X</div>
+                        </div>
+                        
+                        <div id="cal-nextbtn" class="dr-button-container-calendar">
+                            <button style="background-color: #EAB464;" id="dr-previous"
+                                    onclick="previous()">
+                                ‹   
+                            </button>
+                            <h3 style="color: #EAB464;" id="dr-monthAndYear"></h3>
+                            <button style="background-color: #EAB464;" id="dr-next"
+                                    onclick="next()">
+                                ›
+                            </button>
+                        </div>
+                        <table class="dr-table-calendar"
+                            id="dr-calendar"
+                            data-lang="en">
+                            <thead id="dr-thead-month"></thead>
+                            <!-- Table body for displaying the calendar -->
+                            <tbody id="dr-calendar-body"></tbody>
+                        </table>
+                        <div class="dr-footer-container-calendar">
+                            <label style="color: #EAB464;" for="dr-month">Jump To: </label>
+                            <!-- Dropdowns to select a specific month and year -->
+                            <select id="dr-month" onchange="jump()">
+                                <option value=0>Jan</option>
+                                <option value=1>Feb</option>
+                                <option value=2>Mar</option>
+                                <option value=3>Apr</option>
+                                <option value=4>May</option>
+                                <option value=5>Jun</option>
+                                <option value=6>Jul</option>
+                                <option value=7>Aug</option>
+                                <option value=8>Sep</option>
+                                <option value=9>Oct</option>
+                                <option value=10>Nov</option>
+                                <option value=11>Dec</option>
+                            </select>
+                            <!-- Dropdown to select a specific year -->
+                            <select id="dr-year" onchange="jump()"></select>
+                        </div>
+                        
+                        <div id="dr-event-section">
+                            <div class="dr-footer-container-calendar dr-set-time">
+                                <label for="dr-month1">Time: </label>
+                                <!-- Dropdowns to select a specific time -->
+                                <select id="dr-month1" class="dr-hoursChoices" onchange="">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="dr-footer-msg">
+                            * This will reset the appointment status to <b>pending</b> and remove the previous appointment date.
+                        </div>
+                        <div style="display: flex; justify-content: center">
+                            <button style="background-color: #EAB464;" class="dr-confirm-button">Reschedule</button>
+                        </div>
+                    
+                </div>
+                
+        </div>
+            <!-- Include the JavaScript file for the calendar functionality -->
+        <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
+        <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+        <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
+        <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
+
+
+    </div>
+    
     <div class="container-fluid">
         <div id="mySidebar" class="sidebar">
             <a class="closebtn" href="javascript:void(0)" onclick="closeExpansion()" style="font-size: 25px;">x</a>
@@ -153,7 +231,7 @@
                         <tr>
                             <td>Pending</td>
                             <td>2009/09/10</td>
-                            <td><button class="btn btn-primary">Resched</button></td>
+                            <td><button onclick="onClickShowCal()" class="btn btn-primary resched">Resched</button></td>
                             <td><button class="btn btn-danger">Cancel</button></td>
                         </tr>
                     </tbody>
@@ -189,6 +267,54 @@
 
     <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
+    <script>
+        function onClickShowCal(){
+            const calendar = document.getElementById('calendar')
+            const dimmer = document.getElementById('dr-dimmer')
+            calendar.style.display = "block"
+            dimmer.style.display = "block"
+            calendar.classList.add('active');
+            document.addEventListener('click', outsideClickListener);
+        }
+
+        function onClickCloseCal(){
+            const calendar = document.getElementById('calendar')
+            const dimmer = document.getElementById('dr-dimmer')
+            calendar.classList.remove('active')
+            calendar.classList.add('inactive')
+
+            setTimeout(() => {
+                calendar.style.display = "none";
+                dimmer.style.display = "none";
+                calendar.classList.remove('inactive')
+            }, 400); // Wait for animation to finish before hiding
+
+            
+
+            
+        }
+        function outsideClickListener(event) {
+            const calendar = document.getElementById('calendar');
+            const modalContent = document.querySelector('.dr-body');
+            const btn = document.getElementsByClassName('resched')
+            console.log("btn", btn)
+            const btnArray = Array.from(btn);
+
+            console.log("btnCollection", btnArray);
+
+            // Check if the click is outside the calendar and not on any resched button
+            const isClickOutsideBtn = !btnArray.some(btn => btn.contains(event.target));
+
+
+            // Close the modal if click is outside the modal content
+            if (calendar.style.display === "block" && !calendar.contains(event.target) && isClickOutsideBtn) {
+                console.log("TRIGGERING")
+                onClickCloseCal();
+            }
+        }
+
+        
+    </script>
     <script>
         function getName() {
             return fetch(`api/patient?for=session`)
@@ -248,12 +374,12 @@
             document.getElementById("mySidebar").style.width = "250px";
         }
 
-        const closeExpansion = () => {
+        function closeExpansion(){
             $("#main").css('opacity', '1');
             closeNav();
         }
 
-        const expand = () => {
+        function expand(){
             openNav();
             $("#main").css('opacity', '0');
         }

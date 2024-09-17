@@ -1,0 +1,85 @@
+.dr-modal {
+    background-color: white;
+    padding: 10px;
+    position: fixed;
+    top: 10px;
+    left:-5px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.dr-date-picker {
+    font-size: 10px;
+    max-width: 10px;
+}
+
+.dr-close-btn {
+    margin-bottom: 10px;
+    text-align:end;
+    align-self: flex-end;
+    font-weight: bold;
+
+}
+
+.dr-close-btn:hover {
+    cursor: pointer;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-150%);
+    }
+}
+
+.modal-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#dr-dimmer {
+    display: none; 
+    background-color: rgba(0,0,0,0.5); 
+    width: 100vw; 
+    height: 100vh; 
+    position: fixed; 
+    top: 0px;
+    left: 0px;
+    z-index: 9;
+}
+.dr-modal {
+    /* Add initial state for animation */
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in;
+}
+
+.dr-modal.active {
+    /* Apply the animation when active */
+    animation: slideInFromLeft 0.5s forwards;
+}
+
+.dr-modal.inactive {
+    /* Apply the animation when active */
+    animation: slideInFromRight 0.5s forwards;
+}
+
+.dr-footer-msg{
+    color: red;
+    width: 200px;
+    margin-bottom: 20px;
+}
