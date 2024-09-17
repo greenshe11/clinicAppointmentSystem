@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="onClickShowCal()" id="dr-modal-btn">Show Modal</button>
+    <div id="dr-dimmer" style="display: none; background-color: rgba(0,0,0,0.5); width: 100vw; height: 100vh; position: fixed; top: 0px; left: 0px;"></div>
+    <div id="calendar" class="dr-modal" style="display: none">
+        <link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='datetime_reservation_modal.css') }}">
+        <div class="dr-body">
+                <div class="dr-container-calendar">
+                        <div class="dr-close-btn" onclick="onClickCloseCal()">X</div>
+                        <div id="cal-nextbtn" class="dr-button-container-calendar">
+                            <button style="background-color: #EAB464;" id="dr-previous"
+                                    onclick="previous()">
+                                ‹   
+                            </button>
+                            <h3 style="color: #EAB464;" id="dr-monthAndYear"></h3>
+                            <button style="background-color: #EAB464;" id="dr-next"
+                                    onclick="next()">
+                                ›
+                            </button>
+                        </div>
+                        <table class="dr-table-calendar"
+                            id="dr-calendar"
+                            data-lang="en">
+                            <thead id="dr-thead-month"></thead>
+                            <!-- Table body for displaying the calendar -->
+                            <tbody id="dr-calendar-body"></tbody>
+                        </table>
+                        <div class="dr-footer-container-calendar">
+                            <label style="color: #EAB464;" for="dr-month">Jump To: </label>
+                            <!-- Dropdowns to select a specific month and year -->
+                            <select id="dr-month" onchange="jump()">
+                                <option value=0>Jan</option>
+                                <option value=1>Feb</option>
+                                <option value=2>Mar</option>
+                                <option value=3>Apr</option>
+                                <option value=4>May</option>
+                                <option value=5>Jun</option>
+                                <option value=6>Jul</option>
+                                <option value=7>Aug</option>
+                                <option value=8>Sep</option>
+                                <option value=9>Oct</option>
+                                <option value=10>Nov</option>
+                                <option value=11>Dec</option>
+                            </select>
+                            <!-- Dropdown to select a specific year -->
+                            <select id="dr-year" onchange="jump()"></select>
+                        </div>
+                        
+                        <div id="dr-event-section">
+                            <div class="dr-footer-container-calendar dr-set-time">
+                                <label for="dr-month1">Time: </label>
+                                <!-- Dropdowns to select a specific time -->
+                                <select id="dr-month1" class="dr-hoursChoices" onchange="">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: center">
+                            <button style="background-color: #EAB464;" class="dr-confirm-button">Reschedule</button>
+                        </div>
+                    
+                </div>
+                
+        </div>
+            <!-- Include the JavaScript file for the calendar functionality -->
+        <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
+        <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+        <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
+        <script src="{{ url_for('static', filename='datetime_reservation.js') }}"></script>
+
+
+    </div>
+    <script>
+        function onClickShowCal(){
+            const calendar = document.getElementById('calendar')
+            const dimmer = document.getElementById('dr-dimmer')
+            calendar.style.display = "block"
+            dimmer.style.display = "block"
+            calendar.classList.add('active');
+            document.addEventListener('click', outsideClickListener);
+        }
+
+        function onClickCloseCal(){
+            const calendar = document.getElementById('calendar')
+            const dimmer = document.getElementById('dr-dimmer')
+            calendar.classList.remove('active')
+            calendar.classList.add('inactive')
+
+            setTimeout(() => {
+                calendar.style.display = "none";
+                dimmer.style.display = "none";
+                calendar.classList.remove('inactive')
+            }, 400); // Wait for animation to finish before hiding
+
+            
+
+            
+        }
+        function outsideClickListener(event) {
+            const calendar = document.getElementById('calendar');
+            const modalContent = document.querySelector('.dr-body');
+            const btn = document.getElementById('dr-modal-btn')
+
+
+            // Close the modal if click is outside the modal content
+            if (calendar.style.display === "block" && !calendar.contains(event.target) && !btn.contains(event.target)) {
+                console.log("TRIGGERING")
+                onClickCloseCal();
+            }
+        }
+
+        
+    </script>
+</body>
+</html>
