@@ -71,6 +71,7 @@ def pull_from_db(self, data, table_name, jsonify_return=True, logical_op="AND"):
     try:
         conn = self.connect_db()
         cursor = conn.cursor()
+        
         query = get_query(cursor=cursor,
                             table_name=table_name,
                             data=data,

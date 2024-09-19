@@ -36,18 +36,23 @@ class App:
         self.app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
         self.app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
         self.app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
-        #self.app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT')) 
+        #self.app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT'))
 
     def connect_db(self):
         """Create a MySQL database connection."""
-
-        return Mysqldb.connect(
-            host=self.app.config['MYSQL_HOST'],
-            user=self.app.config['MYSQL_USER'],
-            password=self.app.config['MYSQL_PASSWORD'],
-            db=self.app.config['MYSQL_DB'],
-            #port=self.app.config['MYSQL_PORT'] 
-        )
+        try:
+            connection = Mysqldb.connect(
+                host=self.app.config['MYSQL_HOST'],
+                user=self.app.config['MYSQL_USER'],
+                password=self.app.config['MYSQL_PASSWORD'],
+                db=self.app.config['MYSQL_DB'],
+                #port=self.app.config['MYSQL_PORT'] 
+            )
+            print("Connection to the database was successful.")
+            return connection
+        except Mysqldb.Error as e:
+            print(f"Error connecting to the database: {e}")
+            return None
     
     def create_page_routes(self):
         @self.app.route('/')
@@ -142,6 +147,7 @@ class App:
     def run(self):
         """Run the Flask application."""
         self.app.run(debug=True)
+
 
 if __name__ == '__main__':
     app_instance = App()
