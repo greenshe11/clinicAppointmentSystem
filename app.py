@@ -41,13 +41,19 @@ class App:
     def connect_db(self):
         """Create a MySQL database connection."""
 
-        return Mysqldb.connect(
-            host=self.app.config['MYSQL_HOST'],
-            user=self.app.config['MYSQL_USER'],
-            password=self.app.config['MYSQL_PASSWORD'],
-            db=self.app.config['MYSQL_DB'],
-            #port=self.app.config['MYSQL_PORT'] 
-        )
+        try:
+            connection = Mysqldb.connect(
+                host=self.app.config['MYSQL_HOST'],
+                user=self.app.config['MYSQL_USER'],
+                password=self.app.config['MYSQL_PASSWORD'],
+                db=self.app.config['MYSQL_DB'],
+                #port=self.app.config['MYSQL_PORT'] 
+            )
+            print("Connection to the database was successful.")
+            return connection
+        except Mysqldb.Error as e:
+            print(f"Error connecting to the database: {e}")
+            return None
     
     def create_page_routes(self):
         @self.app.route('/')
