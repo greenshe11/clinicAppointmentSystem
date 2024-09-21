@@ -10,75 +10,6 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/sidebar.css')}}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .profile-container {
-            padding: 10px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            border-bottom-width: 1px;
-            border-bottom-color: #817F7E;
-            border-bottom-style: solid;
-            margin-bottom: 20px;
-        }
-
-        .user-icon {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin: 20px;
-        }
-
-        .profile-name-container {
-            color: #817F7E;
-        }
-
-        .openbtn {
-            margin-left: -20px;
-            margin-top: 20px;
-        }
-
-        span {
-            color: rgba(255, 0, 0, 0.5);
-        }
-
-        span:hover {
-            cursor: pointer;
-            color: rgba(255, 0, 0, 1);
-        }
-
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: #171717;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-
-        .sidebar a {
-            text-decoration: none;
-            font-size: 25px;
-            transition: 0.3s;
-            color: white;
-        }
-
-        .sidebar a:hover {
-            color: #f1f1f1;
-        }
-
-        .sidebar .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-    </style>
 </head>
 
 <body>
@@ -98,7 +29,6 @@
             <div id="container-button">
                 <button class="btn btn-primary"><a href="/home">Home</a></button>
                 <button class="btn btn-primary"><a href="/schedule">Schedule</a></button>
-                <button class="btn btn-primary"><a href="/history">History</a></button>
                 <button class="btn btn-primary"><a href="/about">About</a></button>
 
             </div>

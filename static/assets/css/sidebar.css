@@ -1,5 +1,6 @@
 body {
   background-color: #212121;
+  height: auto;
 }
 
 #title-opening {
@@ -7,11 +8,7 @@ body {
   color: #EAB464;
 }
 
-@media only screen and (max-width: 600px) {
-  #title-opening {
-    font-size: 60px;
-  }
-}
+
 
 
 #title-second {
@@ -83,13 +80,7 @@ body {
   font-size: 25px;
 }
 
-@media only screen and (max-width: 600px) {
-  #home button {
-    width: 60%;
-    height: 70px;
-  }
 
-}
 
 
 #container-button button {
@@ -111,11 +102,23 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: red;
+  background-color: #171717;
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
 }
+
+.sidebar a {
+  text-decoration: none;
+  font-size: 25px;
+  transition: 0.3s;
+  color: white;
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
 
 
 .sidebar .closebtn {
@@ -133,6 +136,8 @@ body {
   color: white;
   padding: 10px 15px;
   border: none;
+  margin-left: -20px;
+  margin-top: 20px;
 }
 
 .openbtn:hover {
@@ -260,11 +265,83 @@ body {
 }
 
 
+.profile-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: #817F7E;
+  border-bottom-style: solid;
+  margin-bottom: 20px;
+}
 
 
+.user-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin: 20px;
+}
+
+.profile-name-container {
+  color: #817F7E;
+}
+
+
+span {
+  color: rgba(255, 0, 0, 0.5);
+}
+
+span:hover {
+  cursor: pointer;
+  color: rgba(255, 0, 0, 1);
+}
+
+
+
+/*Media Queries*/
 @media (max-height: 450px) {
   .sidebar #container-button button {
     padding-top: 15px;
     font-size: 18px;
   }
+}
+
+@media only screen and (max-width: 600px) {
+  #title-opening {
+    font-size: 60px;
+  }
+
+  #home button {
+    width: 60%;
+    height: 70px;
+  }
+
+  #contents {
+    width:200px;
+  }
+
+  #text-debug {
+    width: 250px;
+    height: 150px;
+    padding: 0px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #EAB464;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    /* Disable resizing */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-left: 20px;
+  }
+
+  #title-second {
+    font-size: 45px;
+  }
+
+
 }
