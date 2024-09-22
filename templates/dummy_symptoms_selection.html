@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptoms Selection</title>
+    
+    
+</head>
+<body>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="{{ url_for('static', filename='symptoms_selection.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='symptoms_selection.css')}}">
+    <div class="container mt-5 symptoms-selector-container">
+        <h3>Symptoms Suggestion Dropdown</h3>
+        
+        <!-- Bootstrap dropdown with input -->
+        <div id="symptom-tags-container">
+            <span>Symptoms Selected:  </span>
+            <br>
+            <span class="symptom-tags-tip">(click on tag to remove)</span>
+            <br>
+            <div id="symptom-tags-list"></div>
+        </div>
+        <div class="dropdown">
+            <input type="text" id="textbox" class="form-control" placeholder="Find and select symptoms..." oninput="suggestSymptoms()" onfocus="suggestSymptoms()" autocomplete="off" aria-haspopup="true" aria-expanded="false" />
+            <ul id="symptoms-suggestion-list" class="dropdown-menu w-100 show">
+            </ul>
+        </div>
+        
+    </div>
+    
+</body>
+<script>
+
+</script>
+
+
+</html>
